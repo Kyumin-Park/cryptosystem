@@ -37,6 +37,19 @@ def modulo_power(basis, exponent, divisor):
 
 
 if __name__ == '__main__':
-    print(is_relatively_prime(4, 9))
-    print(extended_euclid(246, 426))
-    print(modulo_power(23, 3, 9))
+    # print(is_relatively_prime(4, 9))
+    # print(extended_euclid(10, 11))
+    print(modulo_power(2, 100, 101))
+    a = 2
+    m = 1
+    cnt = 0
+    for a in range(2, 101):
+        m = 1
+        while True:
+            if modulo_power(a, m, 101) == 1:
+                print(a, m)
+                break
+            m += 1
+        if m == 100:
+            cnt += 1
+    print(cnt)

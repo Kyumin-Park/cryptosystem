@@ -35,7 +35,8 @@ class RSA(PKC):
         phi_n = (p - 1) * (q - 1)
         # Select random e s.t. phi(n) and e are relatively prime
         while True:
-            e = random.randint(2, 2 * phi_n)
+            # e = random.randint(2, 2 * phi_n)
+            e = 5
             if is_relatively_prime(phi_n, e):
                 break
 
@@ -43,6 +44,7 @@ class RSA(PKC):
         d = extended_euclid(e, phi_n)[1]
 
         self.public_key, self.private_key = (n, e), d
+        print(n, phi_n, e, d)
 
     def encrypt(self, M):
         """
@@ -83,6 +85,7 @@ class ElGamal(PKC):
         p, g, y = self.public_key
         if k is None:
             k = random.randint(1, p - 1)
+        print('k: ', k)
         C1 = modulo_power(g, k, p)
         C2 = (m * modulo_power(y, k, p)) % p
         return C1, C2
@@ -95,16 +98,60 @@ class ElGamal(PKC):
         return m
 
 
+class RSAMod(PKC):
+    def __init__(self, **kwargs):
+        super(RSAMod, self).__init__(**kwargs)
+
+    def keygen(self, **kwargs):
+        """
+        RSA keygen function
+        set public key and private key from two input prime numbers
+        """
+        try:
+            p, q = kwargs['p'], kwargs['q']
+        except KeyError:
+            return
+        n = p * q
+        gcd, _ = extended_euclid(p - 1, q - 1)
+        lambda_n = (p - 1) * (q - 1) // gcd
+        # Select random e s.t. phi(n) and e are relatively prime
+        while True:
+            # e = random.randint(2, 2 * lambda_n)
+            e = 5
+            if is_relatively_prime(lambda_n, e):
+                break
+
+        # Get multiplicative inverse of e mod phi(n)
+        d = extended_euclid(e, lambda_n)[1]
+
+        self.public_key, self.private_key = (n, e), d
+        print(n, gcd, lambda_n, e, d)
+
+    def encrypt(self, M):
+        """
+        Encrypt Message with generated key
+        :param M: Message
+        :return: Encrypted message
+        """
+        n, e = self.public_key
+        return modulo_power(M, e, n)
+
+
 if __name__ == '__main__':
     # RSA
-    rsa = RSA(p=3, q=11)
-    C = rsa.encrypt(M=5)
-    M = rsa.decrypt(C=C)
-    print(M, C)
+    # rsa = RSA(p=109, q=127)
+    # C = rsa.encrypt(M=5)
+    # M = rsa.decrypt(C=C)
+    # print(M, C)
 
     # Elgamal
-    eg = ElGamal(p=23, g=7, x=9)
-    c1, c2 = eg.encrypt(20, 3)
+    eg = ElGamal(p=41, g=7, x=17)
+    c1, c2 = eg.encrypt(33)
     m = eg.decrypt(c1, c2)
     print(eg.private_key, eg.public_key)
     print(c1, c2, m)
+
+    # rsa_mod = RSAMod(p=109, q=127)
+    # C = rsa.encrypt(M=5)
+    # M = rsa.decrypt(C=C)
+    # print(M, C)

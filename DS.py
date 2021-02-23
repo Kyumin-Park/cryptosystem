@@ -78,6 +78,7 @@ class ElGamal(DS):
         (p, g, _), x = self.public_key, self.private_key
         if k is None:
             k = random.randint(1, p - 1)
+        print('k:', k)
 
         r = modulo_power(g, k, p)
         ks = (m - ((x * r) % (p - 1))) % (p - 1)
@@ -89,16 +90,18 @@ class ElGamal(DS):
         p, g, y = self.public_key
         left = (modulo_power(y, r, p) * modulo_power(r, s, p)) % p
         right = modulo_power(g, m, p)
+        print(left, right)
         return left == right
 
 
 if __name__ == '__main__':
     # DS: RSA
-    ds_rsa = RSA(p=3, q=11)
-    s = ds_rsa.signature(10)
-    print(ds_rsa.verify(s, 10))
+    # ds_rsa = RSA(p=3, q=11)
+    # s = ds_rsa.signature(10)
+    # print(ds_rsa.verify(s, 10))
 
     # DS: ElGamal
-    eg = ElGamal(p=23, g=7, x=9)
-    r, s = eg.signature(20, 3)
-    print(eg.verify(r, s, 20))
+    eg = ElGamal(p=41, g=7, x=17)
+    r, s = eg.signature(33, 11)
+    print(eg.verify(r, s, 33))
+    print(r, s)

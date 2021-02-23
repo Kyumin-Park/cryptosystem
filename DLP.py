@@ -130,10 +130,10 @@ def index_calculus(p, g, y, B):
         if factor is not None:
             linear_relations.append((factor, k))
 
-    # print('2. Collect Linear relations')
-    # for i, (factor, k) in enumerate(linear_relations):
-    #     output_str = ' * '.join(['{}^{}'.format(pr, ai) for pr, ai in factor])
-    #     print('\t{}^{} = {} mod {}'.format(g, k, output_str, p))
+    print('2. Collect Linear relations')
+    for i, (factor, k) in enumerate(linear_relations):
+        output_str = ' * '.join(['{}^{}'.format(pr, ai) for pr, ai in factor])
+        print('\t{}^{} = {} mod {}'.format(g, k, output_str, p))
 
     # Sort linear relations by number of variables included, then solve linear equations
     linear_relations.sort(key=lambda x: len(x[0]))
@@ -168,7 +168,7 @@ def index_calculus(p, g, y, B):
 
 if __name__ == '__main__':
     # Baby step-Giant step
-    baby_giant(p=809, a=3, b=500)
+    # baby_giant(p=809, a=3, b=500)
 
     # Index Calculus
-    index_calculus(p=809, g=3, y=500, B=10)
+    index_calculus(p=101, g=2, y=17, B=10)
